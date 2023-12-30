@@ -44,8 +44,18 @@ def install_pre_commit_hooks():
     execute(sys.executable, "-m", "pip", "install", "pre-commit==2.12.0")
     execute(sys.executable, "-m", "pre_commit", "install")
 
-
+def create_conda_environment(env_name):
+    try:
+        # Create the Conda environment
+        subprocess.run(["conda", "create", "--name", env_name, "python=3.8", "-y"], check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Failed to create Conda environment: {e}")
+        sys.exit(1)
+        
 if __name__ == '__main__':
+    conda_env_name = '{{ cookiecutter.conda_env_name }}'
+    if conda_env_name:
+        create_conda_environment(conda_env_name)
 
     if 'no' in '{{ cookiecutter.command_line_interface|lower }}':
         cli_file = os.path.join('{{ cookiecutter.pkg_name }}', 'cli.py')
