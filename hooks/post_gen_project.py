@@ -47,13 +47,18 @@ def install_pre_commit_hooks():
 def create_conda_environment(env_name):
     try:
         # Create the Conda environment
-        subprocess.run(["conda", "create", "--name", env_name, "python=3.8", "-y"], check=True)
+        print(f"Activating Conda environment: {env_name}")
+        subprocess.run(["conda", "create", "--name", env_name, "python=3.10", "-y"], check=True)
+        if {{ cookiecutter.activate_conda_env }} == "y":
+            print(f"Activating Conda environment: {env_name}")
+            subprocess.run(["conda", "activate", env_name], check=True)
     except subprocess.CalledProcessError as e:
         print(f"Failed to create Conda environment: {e}")
         sys.exit(1)
         
 if __name__ == '__main__':
     conda_env_name = '{{ cookiecutter.conda_env_name }}'
+    print(f"Beginning post-gen hook execution. Conda environment name: {conda_env_name}")
     if conda_env_name:
         create_conda_environment(conda_env_name)
 

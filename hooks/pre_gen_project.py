@@ -19,6 +19,8 @@ def find_conda_base_path():
         print(conda_path)
         # Extract the base path (two levels up from the actual 'conda' executable)
         base_path = os.path.dirname(os.path.dirname(conda_path))
+
+        print(f"Conda base path value: {base_path}")
         return base_path
     except subprocess.CalledProcessError:
         print("Conda is not installed or not in the PATH.")
@@ -32,7 +34,7 @@ cookiecutter(
 
 # Get the current directory
 current_directory = os.getcwd()
-
+print(f"Current directory value: {current_directory}")
 
 module_name = '{{ cookiecutter.pkg_name}}'
 
