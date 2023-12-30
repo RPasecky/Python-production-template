@@ -1,0 +1,3 @@
+{
+    "python.defaultInterpreterPath":  "{{ cookiecutter.conda_base_path }}/envs/{{ cookiecutter.conda_env_name }}/bin/python3"
+}

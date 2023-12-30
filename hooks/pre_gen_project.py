@@ -1,6 +1,7 @@
 import os
 import re
 import sys
+from cookiecutter.main import cookiecutter
 
 
 MODULE_REGEX = r'^[_a-zA-Z][_a-zA-Z0-9]+$'
@@ -22,16 +23,13 @@ def find_conda_base_path():
         sys.exit(1)
 
 conda_base_dir = find_conda_base_path()
-os.environ['COOKIECUTTER_CONDA_BASE_DIR'] = conda_base_dir
-
+cookiecutter(
+    'cookiecutter-django',
+    extra_context={'conda_base_dir': conda_base_dir}
+)
 
 # Get the current directory
 current_directory = os.getcwd()
-
-# Set an environment variable with the current directory
-os.environ['COOKIECUTTER_CURRENT_DIRECTORY'] = current_directory
-
-
 
 
 module_name = '{{ cookiecutter.pkg_name}}'
