@@ -26,7 +26,7 @@ def find_conda_base_path():
 
 conda_base_dir = find_conda_base_path()
 cookiecutter(
-    'cookiecutter-django',
+    'cookiecutter-pypackage',
     extra_context={'conda_base_dir': conda_base_dir}
 )
 
