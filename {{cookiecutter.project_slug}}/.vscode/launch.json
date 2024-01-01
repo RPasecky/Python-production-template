@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "python": "{{ cookiecutter.conda_base_path }}/envs/{{ cookiecutter.conda_env_name }}/bin/python3",
+            "python": "{{ cookiecutter.conda_base_dir }}/envs/{{ cookiecutter.conda_env_name }}/bin/python3",
             "justMyCode": true
         }
     ]

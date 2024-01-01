@@ -1,5 +1,3 @@
-import os
-import subprocess
 import re
 import sys
 from cookiecutter.main import cookiecutter

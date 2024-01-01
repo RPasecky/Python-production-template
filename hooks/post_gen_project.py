@@ -49,11 +49,15 @@ def create_conda_environment(env_name):
         # Create the Conda environment
         print(f"Activating Conda environment: {env_name}")
         subprocess.run(["conda", "create", "--name", env_name, "python=3.10", "-y"], check=True)
-        if {{ cookiecutter.activate_conda_env }} == "y":
-            print(f"Activating Conda environment: {env_name}")
-            subprocess.run(["conda", "activate", env_name], check=True)
+        #if "{{ cookiecutter.activate_conda_env }}" == "y":
+        #    print(f"Activating Conda environment: {env_name}")
+        #    shell_name = "bash"
+        #    subprocess.run(["conda", "init", shell_name])
+        #    subprocess.run(["conda", "activate", env_name], check=True)
     except subprocess.CalledProcessError as e:
         print(f"Failed to create Conda environment: {e}")
+        subprocess.run(["conda", "env", "remove", "--name", env_name, "python=3.10", "-y"], check=True)
+
         sys.exit(1)
         
 if __name__ == '__main__':

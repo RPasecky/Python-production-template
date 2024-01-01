@@ -21,9 +21,25 @@ def find_conda_base_path():
         print("Conda is not installed or not in the PATH.")
         sys.exit(1)
 
-with open('cookiecutter.json') as f:
-    cookiecutter_json = json.load(f)
+
+def set_conda_base_dir() -> None:
+    cookiecutter_json = _read_cookiecutter_json()
     cookiecutter_json['conda_base_dir'] = find_conda_base_path()
     cookiecutter_json['current_directory'] = os.getcwd()
-    
-    json.dumps(cookiecutter_json, indent=2)
+    _write_cookiecutter_json(cookiecutter_json)
+
+
+
+def _read_cookiecutter_json() -> dict:
+    cookiecutter_json_path = os.path.join(os.getcwd(), "cookiecutter.json")
+    with open(file=cookiecutter_json_path, mode="r") as f:
+        return json.load(f)
+
+
+def _write_cookiecutter_json(data: dict) -> None:
+    cookiecutter_json_path = os.path.join(os.getcwd(), "cookiecutter.json")
+    with open(file=cookiecutter_json_path, mode="w") as f:
+        json.dump(data, fp=f)
+
+
+set_conda_base_dir()
