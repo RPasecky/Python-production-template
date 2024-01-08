@@ -20,7 +20,7 @@
 
 ???+ Question
     # Why mkdocs over sphinx?
-    reStructured Text and Sphinx is way to tedious, though powerful. With extension,
+    Though powerful, reStructured Text and Sphinx is way toi tedious. With extension,
     you'll find almost all features are available in mkdocs, in a neat and productive
     way. Poetry and Markdown, are the two key factors driven me develop this template.
 
@@ -45,6 +45,12 @@
     pkg_name
     The namespace of your Python package. This should be Python import-friendly.
 
+    conda_base_dir
+    This shows the install directory of your conda package. Used to build your conda environment post install
+
+    conda_env_name
+    Set this value to determin your conda env name, defaults to variation on your package name
+
     project_short_description
     A 1-sentence description of what your Python package does.
 
@@ -60,19 +66,26 @@
     version
     The starting version number of the package.
 
+    docstrings_style
+    one of `google, numpy, pep257`. It's required by flake8-docstrings.
     use_mypy
     If use mypy for static type check in pre-commit hooks and tox.
 
     install_precommit_hooks
     If you choose yes, then cookiecutter will install pre-commit hooks for you.
 
-    docstrings_style
-    one of `google, numpy, pep257`. It's required by flake8-docstrings.
+
 
     ## Options
 
     The following package configuration options set up different features
     for your project.
+
+    install_precommit_hooks
+    Add checks to run with each git commit. Examples include linting and pytest.
+
+    activate_conda_env
+    Decides whether the application should activate conda for the user on project creation. 
 
     command_line_interface
     Whether to create a console script using Python Click. Console script

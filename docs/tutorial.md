@@ -35,20 +35,19 @@ Go to this generated folder, the project layout should look like:
 
 ```
 .
-├── .bumpversion.cfg
-├── .editorconfig
 ├── .github
 │   ├── ISSUE_TEMPLATE.md
 │   └── workflows
 │       ├── dev.yml
 │       ├── preview.yml
 │       └── release.yml
-├── .gitignore
-├── .pre-commit-config.yaml
-├── CHANGELOG.md
-├── CONTRIBUTING.md
-├── LICENSE
-├── README.md
+├── .vscode
+│   ├── launch.json
+│   └── settings.json
+├── my_package
+│   ├── __init__.py
+│   ├── cli.py
+│   └── my_package.py
 ├── docs
 │   ├── api.md
 │   ├── changelog.md
@@ -56,17 +55,24 @@ Go to this generated folder, the project layout should look like:
 │   ├── index.md
 │   ├── installation.md
 │   └── usage.md
-├── makefile
-├── mkdocs.yml
-├── my_package
-│   ├── __init__.py
-│   ├── cli.py
-│   └── my_package.py
-├── pyproject.toml
-├── setup.cfg
 └── tests
     ├── __init__.py
-    └── test_my_package.py
+     test_my_package.py
+├── .bumpversion.cfg
+├── .editorconfig
+├── .gitignore
+├── .pre-commit-config.yaml
+├── CHANGELOG.md
+├── CONTRIBUTING.md
+├── dynaconfig.py
+├── LICENSE
+├── makefile
+├── mkdocs.yml
+├── pyproject.toml
+├── README.md
+├── requirements.txt
+├── settings.toml
+└── setup.cfg
 
 ```
 

@@ -3,11 +3,12 @@ import sys
 import os
 import subprocess
 
+
 def find_conda_base_path():
     try:
         # Use 'where' on Windows, 'which' on Unix-like systems
-        command = 'which' 
-        result = subprocess.check_output([command, 'conda']).decode().strip()
+        command = "which"
+        result = subprocess.check_output([command, "conda"]).decode().strip()
         print(result)
         # Split the output and get the first result
         conda_path = result.splitlines()[0]
@@ -24,10 +25,9 @@ def find_conda_base_path():
 
 def set_conda_base_dir() -> None:
     cookiecutter_json = _read_cookiecutter_json()
-    cookiecutter_json['conda_base_dir'] = find_conda_base_path()
-    cookiecutter_json['current_directory'] = os.getcwd()
+    cookiecutter_json["conda_base_dir"] = find_conda_base_path()
+    cookiecutter_json["current_directory"] = os.getcwd()
     _write_cookiecutter_json(cookiecutter_json)
-
 
 
 def _read_cookiecutter_json() -> dict:

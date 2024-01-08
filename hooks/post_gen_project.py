@@ -13,18 +13,18 @@ def remove_file(filepath):
         pass
 
 
-def execute(*args, supress_exception = False, cwd=None):
+def execute(*args, supress_exception=False, cwd=None):
     cur_dir = os.getcwd()
 
     try:
         if cwd:
             os.chdir(cwd)
 
-        proc = subprocess.Popen(args, stdout = subprocess.PIPE, stderr= subprocess.PIPE)
+        proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         out, err = proc.communicate()
-        out = out.decode('utf-8')
-        err = err.decode('utf-8')
+        out = out.decode("utf-8")
+        err = err.decode("utf-8")
         if err and not supress_exception:
             raise Exception(err)
         else:
@@ -36,7 +36,14 @@ def execute(*args, supress_exception = False, cwd=None):
 def init_git():
     # workaround for issue #1
     if not os.path.exists(os.path.join(PROJECT_DIRECTORY, ".git")):
-        execute("git", "config", "--global", "init.defaultBranch", "main", cwd = PROJECT_DIRECTORY)
+        execute(
+            "git",
+            "config",
+            "--global",
+            "init.defaultBranch",
+            "main",
+            cwd=PROJECT_DIRECTORY,
+        )
         execute("git", "init", cwd=PROJECT_DIRECTORY)
 
 
@@ -44,43 +51,83 @@ def install_pre_commit_hooks():
     execute(sys.executable, "-m", "pip", "install", "pre-commit==2.12.0")
     execute(sys.executable, "-m", "pre_commit", "install")
 
+
 def create_conda_environment(env_name):
     try:
         # Create the Conda environment
         print(f"Activating Conda environment: {env_name}")
-        subprocess.run(["conda", "create", "--name", env_name, "python=3.10", "-y"], check=True)
-        #if "{{ cookiecutter.activate_conda_env }}" == "y":
-        #    print(f"Activating Conda environment: {env_name}")
-        #    shell_name = "bash"
-        #    subprocess.run(["conda", "init", shell_name])
-        #    subprocess.run(["conda", "activate", env_name], check=True)
+        subprocess.run(
+            ["conda", "create", "--name", env_name, "python=3.10", "-y"], check=True
+        )
+
+        # Install and initialize poetry
+        subprocess.run(
+            ["conda", "install", "-n", env_name, "-c", "conda-forge", "poetry", "-y"],
+            check=True,
+        )
+        subprocess.run(["poetry", "init", "--no-interaction"], check=True)
+
+        # export the environment
+        subprocess.run(["poetry", "lock"], check=True)
+        subprocess.run(
+            [
+                "conda",
+                "env",
+                "export",
+                "--name",
+                env_name,
+                "|",
+                "grep",
+                "-v",
+                "^prefix: ",
+                ">",
+                "environment.yml",
+            ],
+            check=True,
+        )
+
+        # Optionally, activate the environment
+        if "{{ cookiecutter.activate_conda_env }}" == "y":
+            print(f"Activating Conda environment: {env_name}")
+            shell_name = "bash"
+            subprocess.run(["conda", "init", shell_name])
+            subprocess.run(["conda", "activate", env_name], check=True)
+
     except subprocess.CalledProcessError as e:
         print(f"Failed to create Conda environment: {e}")
-        subprocess.run(["conda", "env", "remove", "--name", env_name, "python=3.10", "-y"], check=True)
+        subprocess.run(
+            ["conda", "env", "remove", "--name", env_name, "python=3.10", "-y"],
+            check=True,
+        )
 
         sys.exit(1)
-        
-if __name__ == '__main__':
-    conda_env_name = '{{ cookiecutter.conda_env_name }}'
-    print(f"Beginning post-gen hook execution. Conda environment name: {conda_env_name}")
+
+
+if __name__ == "__main__":
+    conda_env_name = "{{ cookiecutter.conda_env_name }}"
+    print(
+        f"Beginning post-gen hook execution. Conda environment name: {conda_env_name}"
+    )
     if conda_env_name:
         create_conda_environment(conda_env_name)
 
-    if 'no' in '{{ cookiecutter.command_line_interface|lower }}':
-        cli_file = os.path.join('{{ cookiecutter.pkg_name }}', 'cli.py')
+    if "no" in "{{ cookiecutter.command_line_interface|lower }}":
+        cli_file = os.path.join("{{ cookiecutter.pkg_name }}", "cli.py")
         remove_file(cli_file)
 
-    if 'Not open source' == '{{ cookiecutter.open_source_license }}':
-        remove_file('LICENSE')
+    if "Not open source" == "{{ cookiecutter.open_source_license }}":
+        remove_file("LICENSE")
 
     try:
         init_git()
     except Exception as e:
         print(e)
 
-    if '{{ cookiecutter.install_precommit_hooks }}' == 'y':
+    if "{{ cookiecutter.install_precommit_hooks }}" == "y":
         try:
             install_pre_commit_hooks()
         except Exception as e:
             print(str(e))
-            print("Failed to install pre-commit hooks. Please run `pre-commit install` by your self. For more on pre-commit, please refer to https://pre-commit.com")
+            print(
+                "Failed to install pre-commit hooks. Please run `pre-commit install` by your self. For more on pre-commit, please refer to https://pre-commit.com"
+            )
