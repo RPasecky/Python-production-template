@@ -8,7 +8,6 @@ from click.testing import CliRunner
 from {{ cookiecutter.pkg_name }} import cli
 {%- endif %}
 
-
 @pytest.fixture
 def response():
     """Sample pytest fixture.

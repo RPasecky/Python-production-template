@@ -65,6 +65,22 @@ def check_conda_env_exists(env_name):
     # Check if the environment name is in the output
     return env_name in result.stdout
 
+def display_getting_started_message():
+    print(
+        """
+        Your new python project '{{ cookiecutter.project_name }}' is ready! 
+        
+        To get started, you'll need to activate the conda environment 
+        and install the dependencies:
+        > cd {{ cookiecutter.project_slug }}
+        > conda activate {{ cookiecutter.conda_env_name }}
+        > poetry install -E doc -E dev -E test
+        > poetry run tox
+
+        More 
+        """
+    )
+
 
 def create_conda_environment(env_name):
     exists = check_conda_env_exists(env_name)
@@ -151,3 +167,5 @@ if __name__ == "__main__":
             logging.error(
                 "Failed to install pre-commit hooks. Please run `pre-commit install` by your self. For more on pre-commit, please refer to https://pre-commit.com"
             )
+    
+    display_getting_started_message()
