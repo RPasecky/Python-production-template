@@ -45,11 +45,12 @@ def execute(args, suppress_exception=False, cwd=None):
 
 
 def init_git():
-    logging.info("Initializing git repository")
+    logging.info("Initializing git repository, moving to development branch")
     # workaround for issue #1
     if not os.path.exists(os.path.join(PROJECT_DIRECTORY, ".git")):
         execute(["git", "config", "--global", "init.defaultBranch", "main"])
         execute(["git", "init"], cwd=PROJECT_DIRECTORY)
+        execute(["git", "checkout", "-b", "development"], cwd=PROJECT_DIRECTORY)
 
 
 def install_pre_commit_hooks():

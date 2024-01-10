@@ -1,6 +1,6 @@
+"""Global logging configuration for the project."""
 import logging
 import sys
-
 
 
 def setup_logging():
