@@ -3,6 +3,8 @@ import logging
 import os
 import subprocess
 import sys
+from urllib.error import HTTPError, URLError
+from urllib.request import Request, urlopen
 
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 logging.basicConfig(
@@ -65,6 +67,7 @@ def check_conda_env_exists(env_name):
 
     # Check if the environment name is in the output
     return env_name in result.stdout
+
 
 def display_getting_started_message():
     print(
@@ -138,12 +141,36 @@ def create_conda_environment(env_name):
         sys.exit(1)
 
 
+def check_internet_connection():
+    ping_request = Request("http://www.google.com")
+    try:
+        _ = urlopen(ping_request, timeout=3)  # Attempt to contact a reliable website
+        logging.info("Internet connection verified")
+    except HTTPError as e:
+        # In case of server being reachable but the request fails
+        logging.error("Server could be reached but the request failed with HTTP Error.")
+        sys.exit(1)
+    except URLError as e:
+        # In case of the server being unreachable
+        logging.error(
+            """
+            You don't appear to be connected to the internet. This is required for Conda 
+            environment creation.
+            """
+        )
+        sys.exit(1)
+
+
 if __name__ == "__main__":
     conda_env_name = "{{ cookiecutter.conda_env_name }}"
     logging.info(
-        f"Beginning post-gen hook execution. Conda environment name: {conda_env_name}"
+        f"Beginning post-gen hook execution. Conda environment name: \
+            {conda_env_name}"
     )
+
     if conda_env_name:
+        logging.info(f"Checking internet connection")
+        check_internet_connection()
         create_conda_environment(conda_env_name)
 
     if "no" in "{{ cookiecutter.command_line_interface|lower }}":
@@ -166,7 +193,12 @@ if __name__ == "__main__":
         except Exception as e:
             logging.error(str(e))
             logging.error(
-                "Failed to install pre-commit hooks. Please run `pre-commit install` by your self. For more on pre-commit, please refer to https://pre-commit.com"
+                """
+                Failed to install pre-commit hooks.
+                Please run `pre-commit install`
+                by your self. For more on pre-commit,
+                please refer to https://pre-commit.com
+                """
             )
-    
+
     display_getting_started_message()
